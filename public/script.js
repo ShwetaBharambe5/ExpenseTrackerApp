@@ -61,18 +61,17 @@ function showUsersOnScreen(expenses) {
       deleteBtn.textContent = "Delete";
       userElement.appendChild(deleteBtn);
       expenseList.appendChild(userElement);
-      deleteBtn.addEventListener('click', (event) => deleteUser(expense.id, userElement, event));
+      deleteBtn.addEventListener('click', (event) => deleteUserExpense(expense.id, userElement, event));
     });
   }
   clearInputs();
 }
 
-async function deleteUser(id, listItem, event) {
+async function deleteUserExpense(id, listItem, event) {
   try {
-    console.log("Trying deleting");
     event.stopPropagation(); // Stop event propagation
-  await axios.delete(`/delete-expense/${id}`);
-  console.log(`Product Deleted Successfully.`);
+    await axios.delete(`/delete-expense/${id}`);
+    console.log(`Product Deleted Successfully.`);
 
   // Remove the element from the screen
   if (listItem) {
