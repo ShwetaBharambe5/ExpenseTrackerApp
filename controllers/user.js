@@ -24,6 +24,7 @@ exports.addExpense = async(req, res, next) => {
 
 exports.deleteExpense = async(req, res, next) => {
     try{
+        
         const expenseId = req.params.id;
 
         const expense = await Expense.findByPk(expenseId);
@@ -44,7 +45,7 @@ exports.deleteExpense = async(req, res, next) => {
 exports.getExpense = async (req, res, next) => {
     try {
         const expenses = await Expense.findAll();
-        console.log('All Expenses:', expenses); 
+        //console.log('All Expenses:', expenses); 
         res.json(expenses);
     } catch (err) {
         console.error('Error fetching expenses:', err);

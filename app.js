@@ -17,6 +17,7 @@ app.use(express.static('public'))
 
 app.use(userRoutes);
 
+//for testing purpose
 // app.use('/',(req, res)=>{
 //     //res.send('Hi');
 //     res.sendFile('index.html',{root:'views'});

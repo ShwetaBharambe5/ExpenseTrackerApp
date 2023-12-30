@@ -61,13 +61,16 @@ function showUsersOnScreen(expenses) {
       deleteBtn.textContent = "Delete";
       userElement.appendChild(deleteBtn);
       expenseList.appendChild(userElement);
-      deleteBtn.addEventListener('click', () => deleteUser(expense.id, userElement)); // Pass user.id to deleteUser
+      deleteBtn.addEventListener('click', (event) => deleteUser(expense.id, userElement, event));
     });
   }
   clearInputs();
 }
 
-async function deleteUser(id, listItem) {
+async function deleteUser(id, listItem, event) {
+  try {
+    console.log("Trying deleting");
+    event.stopPropagation(); // Stop event propagation
   await axios.delete(`/delete-expense/${id}`);
   console.log(`Product Deleted Successfully.`);
 
@@ -77,7 +80,11 @@ async function deleteUser(id, listItem) {
   } else {
       console.error(`Error: Element with ID ${id} not found.`);
   }
+  } catch (error) {
+    console.log(error);
+  }
 }
+
 
 function clearInputs() {
   expenseAmount.value = '';
