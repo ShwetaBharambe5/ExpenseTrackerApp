@@ -14,6 +14,8 @@ const Expense = sequelize.define('expense', {
     description: Sequelize.STRING,      
 
     category: Sequelize.STRING         
+},{
+    tableName: 'expenses' // Specify the table name explicitly
 });
 
 module.exports = Expense;

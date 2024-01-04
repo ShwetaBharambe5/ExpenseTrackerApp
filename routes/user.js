@@ -7,6 +7,6 @@ const userController = require('../controllers/user');
 router.post('/add-expense', userController.addExpense);
 router.delete('/delete-expense/:id', userController.deleteExpense);
 router.get('/get-expense', userController.getExpense);
-router.get('/', userController.getExpenseForm);
+router.get('/get-form', userController.getExpenseForm);
 
 module.exports = router;
