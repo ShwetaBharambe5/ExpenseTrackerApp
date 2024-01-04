@@ -2,11 +2,9 @@ const express = require('express');
 
 const router = express.Router();
 
-const userController = require('../controllers/user');
+const signupController = require('../controllers/user');
 
-router.post('/add-expense', userController.addExpense);
-router.delete('/delete-expense/:id', userController.deleteExpense);
-router.get('/get-expense', userController.getExpense);
-router.get('/get-form', userController.getExpenseForm);
+router.post('/signup', signupController.addUser);
+router.get('/', signupController.getUserForm);
 
 module.exports = router;

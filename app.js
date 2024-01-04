@@ -4,9 +4,11 @@ const path = require('path');
 
 const sequelize = require('./util/database');
 
-const userRoutes = require('./routes/user');
+const userRoutes = require('./routes/expense');
 
-const signupRoute = require('./routes/signup');
+const signupRoute = require('./routes/user');
+
+const loginRoute = require('./routes/login');
 
 const port = 3000;
 
@@ -17,6 +19,8 @@ app.use(express.json());
 app.use(express.static('public'))
 
 app.use(signupRoute);
+
+app.use(loginRoute);
 
 app.use(userRoutes);
 //for testing purpose

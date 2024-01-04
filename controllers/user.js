@@ -1,54 +1,33 @@
-const Expense = require('../models/user');
+const User = require('../models/user');
 
-const userRoute = require('../routes/user');
+const signupRoute = require('../routes/user');
 
 const path = require('path');
 
-exports.getExpenseForm = async(req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'views', 'index.html'))
+function isStringInvalid(string){
+    if(string==undefined || string.length==0)
+        return true;
+    return false;
 }
 
-exports.addExpense = async(req, res, next) => {
+exports.getUserForm = async(req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'views', 'signup.html'))
+}
+
+exports.addUser = async(req, res, next) => {
     try{
-        const amount = req.body.amount;
-        const description = req.body.description;
-        const category = req.body.category;
+        const name = req.body.name;
+        const email = req.body.email;
+        const password = req.body.password;
 
-        const data = await Expense.create({amount:amount, description:description, category:category});
+        if(isStringInvalid(name) || isStringInvalid(email) || isStringInvalid(password))
+            return res.status(400).json({err:'Bad Parameter, Something is missing'});
 
-        res.status(201).json({newExpenseDetails:data});
+        const data = await User.create({name:name, email:email, password:password});
+
+        res.status(201).json({newUserDetails:data});
     }catch(err){
         res.status(500).json({error:err});
     }
 }
 
-exports.deleteExpense = async(req, res, next) => {
-    try{
-        
-        const expenseId = req.params.id;
-
-        const expense = await Expense.findByPk(expenseId);
-
-        if(!expense){
-            return res.status(404).json({error: 'Expense not found!'});
-        }
-
-        await expense.destroy();
-        res.status(200).json({message: 'Expense deleted successfully'});
-    }
-    catch(err){
-        console.err('Error deleting expense:', err);
-        res.status(500).json({error: err});
-    }
-};
-
-exports.getExpense = async (req, res, next) => {
-    try {
-        const expenses = await Expense.findAll();
-        
-        res.json(expenses);
-    } catch (err) {
-        console.error('Error fetching expenses:', err);
-        res.status(500).json({error: err});
-    }
-}
