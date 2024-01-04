@@ -6,6 +6,8 @@ const sequelize = require('./util/database');
 
 const userRoutes = require('./routes/user');
 
+const signupRoute = require('./routes/signup');
+
 const port = 3000;
 
 const app = express();
@@ -14,9 +16,9 @@ app.use(express.json());
 
 app.use(express.static('public'))
 
+app.use(signupRoute);
 
 app.use(userRoutes);
-
 //for testing purpose
 // app.use('/',(req, res)=>{
 //     //res.send('Hi');
