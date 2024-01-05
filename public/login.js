@@ -21,6 +21,7 @@ async function onSubmit(e) {
     if (response.data.success) {
       alert('Login successful!');
       // Redirect to another page or perform any other actions upon successful login
+      window.location.href = "index.html";
     } else {
       alert('Login failed. Please check your email and password.');
     }
