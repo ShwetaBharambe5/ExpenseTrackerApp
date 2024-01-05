@@ -1,11 +1,11 @@
 const ExistingUser = require('../models/user'); 
 
-const userRoute = require('../routes/login');
+const loginRoute = require('../routes/login');
 
 const path = require('path');
 
 exports.getLoginForm = async (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'views', 'login.html'));
+  res.sendFile(path.join(__dirname, '../', 'views', 'login.html'));
 };
 
 exports.addLoginDetails = async (req, res, next) => {

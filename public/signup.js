@@ -17,9 +17,20 @@ async function onSubmit(e) {
   try {
     const response = await axios.post("/signup", userDetails);
     console.log('User created successfully:', response.data);
+    
+    if (response.status === 201) {
+        // User created successfully, redirect to login page
+        console.log('Redirecting to login page...');
+        window.location.href = "login.html";
+      } else {
+        // Handle other status codes if needed
+        console.log('Error creating user. Status Code:', response.status);
+      }
+
     clearInputs();
   } catch (err) {
     console.log('Error creating user:', err);
+    document.body.innerHTML+= `<div style="colour:red;">${err}</div>`;
   }
 }
 
