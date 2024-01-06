@@ -20,6 +20,9 @@ async function onSubmit(e) {
     // Assuming your server returns a response indicating success or failure
     if (response.data.success) {
       alert('Login successful!');
+
+      localStorage.setItem('token',response.data.token);
+
       // Redirect to another page or perform any other actions upon successful login
       window.location.href = "index.html";
     } else {

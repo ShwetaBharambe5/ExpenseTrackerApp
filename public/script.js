@@ -4,18 +4,20 @@ const expenseDescription = document.querySelector('#expenseDescription');
 const expenseCategory = document.querySelector('#expenseCategory');
 const expenseList = document.querySelector('#expenses');
 
-expenseForm.addEventListener('submit', onSubmit);
-
 window.addEventListener("DOMContentLoaded", async () => {
   try {
-    const response = await axios.get("/get-expense");
-    console.log('Received Expenses:', response);
-    showUsersOnScreen(response.data);
+    const token = localStorage.getItem('token');
+    const response = await axios.get("/get-expense",{headers:{"Authorization":token}});
+    console.log('Received Expenses:', response.data);
+    for(let i=0; i<response.data.expense.length; i++)
+      showUsersOnScreen(response.data.expense[i]);
   }
   catch (err) {
     console.log(err);
   }
 });
+
+expenseForm.addEventListener('submit', onSubmit);
 
 async function onSubmit(e) {
   e.preventDefault();
@@ -28,13 +30,15 @@ async function onSubmit(e) {
   };
 
   try {
-    const response = await axios.post("/add-expense", expenseDetails);
+    const token = localStorage.getItem('token');
+    const response = await axios.post("/add-expense", expenseDetails, {headers:{"Authorization":token}});
     console.log('expense details created successfully:', response.data);
-    const responseData = response.data;
+    //const responseData = response.data;
 
-    const updatedUsersResponse = await axios.get("/get-expense")
-    console.log('updated expenses:', updatedUsersResponse.data);
-    showUsersOnScreen(updatedUsersResponse.data);
+    //const updatedUsersResponse = await axios.get("/get-expense")
+    //console.log('updated expenses:', updatedUsersResponse.data);
+
+    showUsersOnScreen(response.data.newExpenseDetails);
     clearInputs();
 
   } catch (err) {
@@ -44,46 +48,56 @@ async function onSubmit(e) {
 }
 
 
-function showUsersOnScreen(expenses) {
-  expenseList.innerHTML = '';
+function showUsersOnScreen(expense) {
+  // expenseList.innerHTML = '';
 
-  if (Array.isArray(expenses)) {
+  // if (Array.isArray(expenses)) {
 
-    expenses.forEach((expense) => {
-      const userElement = document.createElement('li');
+  //   expenses.forEach((expense) => {
+  //     const userElement = document.createElement('li');
 
-      userElement.textContent =
-        expense.amount + ', ' +
-        expense.description + ',' +
-        expense.category;
+  //     userElement.textContent =
+  //       expense.amount + ', ' +
+  //       expense.description + ',' +
+  //       expense.category;
 
-      const deleteBtn = document.createElement('button');
-      deleteBtn.textContent = "Delete";
-      userElement.appendChild(deleteBtn);
-      expenseList.appendChild(userElement);
-      deleteBtn.addEventListener('click', (event) => deleteUserExpense(expense.id, userElement, event));
-    });
-  }
-  clearInputs();
+  //     const deleteBtn = document.createElement('button');
+  //     deleteBtn.textContent = "Delete";
+  //     userElement.appendChild(deleteBtn);
+  //     expenseList.appendChild(userElement);
+  //     deleteBtn.addEventListener('click', (event) => deleteUserExpense(expense.id, userElement, event));
+  //   });
+  // }
+  // clearInputs();
+  const parentNode=document.getElementById('expenses');
+
+    const childNode= `<li id="${expense.id}">${expense.amount}--${expense.description}--${expense.category}
+    <button class="btn btn-danger" onclick="deleteUserExpense(${expense.id})">DeleteExpense</button></li>`
+
+    parentNode.innerHTML+=childNode;
 }
 
-async function deleteUserExpense(id, listItem, event) {
+async function deleteUserExpense(id) {
   try {
-    event.stopPropagation(); // Stop event propagation
-    await axios.delete(`/delete-expense/${id}`);
-    console.log(`Product Deleted Successfully.`);
-
-  // Remove the element from the screen
-  if (listItem) {
-      listItem.remove();
-  } else {
-      console.error(`Error: Element with ID ${id} not found.`);
-  }
-  } catch (error) {
+    const token=localStorage.getItem('token');
+    const res=await axios.delete(`/delete-expense/${id}`,{headers:{"Authorization":token}});
+    removeUserFromScreen(id);
+    
+} catch (error) {
     console.log(error);
-  }
+    document.body.innerHTML+=`<h4>Something went wrong --${error}</h4>`
+}
 }
 
+function removeUserFromScreen(id)
+{
+    const parentNode=document.getElementById('expenses');
+
+    const childNode=document.getElementById(id);
+
+    parentNode.removeChild(childNode);
+
+}
 
 function clearInputs() {
   expenseAmount.value = '';
