@@ -21,8 +21,8 @@ const User = sequelize.define('user', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-},{
-    tableName: 'users' // Specify the table name explicitly
-  });
+  ispremiumuser: DataTypes.BOOLEAN
+
+});
 
 module.exports = User;

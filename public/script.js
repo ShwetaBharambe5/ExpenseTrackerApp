@@ -49,26 +49,6 @@ async function onSubmit(e) {
 
 
 function showUsersOnScreen(expense) {
-  // expenseList.innerHTML = '';
-
-  // if (Array.isArray(expenses)) {
-
-  //   expenses.forEach((expense) => {
-  //     const userElement = document.createElement('li');
-
-  //     userElement.textContent =
-  //       expense.amount + ', ' +
-  //       expense.description + ',' +
-  //       expense.category;
-
-  //     const deleteBtn = document.createElement('button');
-  //     deleteBtn.textContent = "Delete";
-  //     userElement.appendChild(deleteBtn);
-  //     expenseList.appendChild(userElement);
-  //     deleteBtn.addEventListener('click', (event) => deleteUserExpense(expense.id, userElement, event));
-  //   });
-  // }
-  // clearInputs();
   const parentNode=document.getElementById('expenses');
 
     const childNode= `<li id="${expense.id}">${expense.amount}--${expense.description}--${expense.category}
@@ -105,3 +85,31 @@ function clearInputs() {
   expenseCategory.value = '';
 }
 
+document.getElementById('rzp-button').onclick = async function (e) {
+  const token=localStorage.getItem('token');
+  const response = await axios.get('/purchase/premiummembership', {headers:{"Authorization":token}});
+  console.log(response);
+
+  var options = 
+  {
+    "key":response.data.key_id,
+    "order_id":response.data.order.id,
+    "handler":async function(response){
+      const res = await axios.post('/purchase/updatetransactionstatus', {
+        order_id:options.order_id,
+        payment_id:response.razorpay_payment_id
+      }, {headers:{"Authorization":token}});
+    
+      alert('You are a premium user now');
+    },
+  };
+
+  const rzp1 = new Razorpay(options);
+  rzp1.open();
+  e.preventDefault();
+
+  rzp1.on('payment.failed', function(response){
+    console.log(response)
+    alert('Something went wrong');
+  });
+}

@@ -53,9 +53,10 @@ exports.deleteExpense = async(req, res, next) => {
 
 exports.getExpense = async (req, res, next) => {
     try {
-        const expenses = await Expense.findAll();
+        const expenses = await Expense.findAll({where:{userId:req.user.id}});  
         
         res.status(200).json({expense:expenses});
+
     } catch (err) {
         console.error('Error fetching expenses:', err);
         res.status(500).json({error: err});
