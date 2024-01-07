@@ -101,6 +101,7 @@ document.getElementById('rzp-button').onclick = async function (e) {
       }, {headers:{"Authorization":token}});
     
       alert('You are a premium user now');
+      showPremiumusermessage();
     },
   };
 
@@ -112,4 +113,12 @@ document.getElementById('rzp-button').onclick = async function (e) {
     console.log(response)
     alert('Something went wrong');
   });
+}
+
+function showPremiumusermessage()
+{
+    const rzp=document.getElementById('rzp-button').style.display="none";
+    //visibility hidden takes space display none takes no space
+    document.getElementById('premium').innerHTML+="You are now a Premium User"
+   
 }

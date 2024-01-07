@@ -31,7 +31,7 @@ exports.purchasepremium = async (req, res) => {
 
 exports.updateTransactionStatus = async (req, res) => {
     try {
-        console.log('Just for testing');
+        
         const {payment_id, order_id} = req.body;
         
         const order = await Order.findOne({where:{orderid:order_id}});
@@ -42,12 +42,12 @@ exports.updateTransactionStatus = async (req, res) => {
         {
             console.log('no order is available');
         }
-        console.log('Just for testing1');
+        
         const promise1 = order.update({paymentid:payment_id, status:'SUCEESSFUL'})
         const promise2 =  req.user.update({ispremiumuser:true})
                     
         await Promise.all([promise1, promise2]);
-        console.log('Just for testing2');
+        
         return res.status(202).json({success:true, message:"Transaction Successful"})
                 
     } catch(err) {
